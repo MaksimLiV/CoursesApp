@@ -1,3 +1,4 @@
+//
 //  CourseManager.swift
 //  Elena Logocentr
 //
@@ -6,22 +7,43 @@
 
 import Foundation
 
+// MARK: - Lesson Status
+
+enum LessonStatus: String, Codable {
+    case locked
+    case available
+    case completed
+}
+
+// MARK: - Lesson Model
+
+struct Lesson: Codable {
+    let title: String
+    let duration: String
+    let status: LessonStatus
+}
+
 // MARK: - Course Model
 
-struct CourseManager: Codable {
+struct CourseModel: Codable {
     let imageName: String
     let title: String
     let lessons: Int
     let price: Double
     var isFavorite: Bool
+    let description: String
+    let duration: String
+    var isPurchased: Bool
+    let lessonsList: [Lesson]
 }
 
 // MARK: - User Model
+
 struct User: Codable {
+    
     let name: String
     let email: String
     
-    // Получение инициалов
     var initials: String {
         let components = name.components(separatedBy: " ")
         let initials = components.compactMap { $0.first }.prefix(2)
@@ -30,12 +52,13 @@ struct User: Codable {
     
     static let testEmail = "maksim@example.com"
     static let testPassword = "12345678"
-    static let testName = "Максим Ли"
+    static let testName = "Maksim Li"
 }
 
 // MARK: - User Session Manager
 
 class UserSessionManager {
+    
     static let shared = UserSessionManager()
     
     private let defaults = UserDefaults.standard
@@ -44,18 +67,14 @@ class UserSessionManager {
     
     private init() {}
     
-    // MARK: - Current User
+    // MARK: Current User
+    
     var currentUser: User? {
         get {
-            // Получаем Data из UserDefaults
-            guard let data = defaults.data(forKey: currentUserKey) else {
-                return nil
-            }
+            guard let data = defaults.data(forKey: currentUserKey) else { return nil }
             
-            // Декодируем Data в User модель
             do {
-                let user = try JSONDecoder().decode(User.self, from: data)
-                return user
+                return try JSONDecoder().decode(User.self, from: data)
             } catch {
                 print("❌ Ошибка декодирования пользователя: \(error)")
                 return nil
@@ -64,7 +83,6 @@ class UserSessionManager {
         
         set {
             if let user = newValue {
-                // Кодируем User модель в Data
                 do {
                     let data = try JSONEncoder().encode(user)
                     defaults.set(data, forKey: currentUserKey)
@@ -72,51 +90,48 @@ class UserSessionManager {
                     print("❌ Ошибка кодирования пользователя: \(error)")
                 }
             } else {
-                // Если nil, удаляем данные
                 defaults.removeObject(forKey: currentUserKey)
             }
         }
     }
     
     var isLoggedIn: Bool {
-        return defaults.bool(forKey: isLoggedInKey)
+        defaults.bool(forKey: isLoggedInKey)
     }
     
-    // ✅ Метод для входа через форму
     func login(email: String, password: String) -> Bool {
+        
         if email == User.testEmail && password == User.testPassword {
+            
             let user = User(
                 name: User.testName,
                 email: User.testEmail
             )
-            self.currentUser = user
             
-            // ✅ Сохраняем только флаг isLoggedIn в UserDefaults
+            currentUser = user
             defaults.set(true, forKey: isLoggedInKey)
             
             print("✅ Успешный вход: \(user.name)")
             return true
         }
+        
         print("❌ Неверный email или пароль")
         return false
     }
     
     func logout() {
         currentUser = nil
-        
-        // ✅ Обнуляем только флаг isLoggedIn в UserDefaults
         defaults.set(false, forKey: isLoggedInKey)
-        
         print("🚪 Выход выполнен")
     }
 }
 
 // MARK: - Course Computed Properties
 
-extension CourseManager {
+extension CourseModel {
     
     var formattedPrice: String {
-        return "Цена: \(String(format: "%.2f", price)) $"
+        return "Price: \(String(format: "%.2f", price)) $"
     }
     
     var formattedLessons: String {
@@ -125,11 +140,14 @@ extension CourseManager {
     
     private var lessonsWord: String {
         let n = lessons
+        
         switch n % 10 {
         case 1 where n % 100 != 11:
             return "урок"
+            
         case let value where (2...4).contains(value) && !(12...14).contains(n % 100):
             return "урока"
+            
         default:
             return "уроков"
         }
@@ -138,46 +156,36 @@ extension CourseManager {
 
 // MARK: - Course Management
 
-extension CourseManager {
+extension CourseModel {
     
     private static let coursesKey = "savedCourses"
     
-    private static var _shared: [CourseManager]?
+    static var shared: [CourseModel] = loadCourses()
     
-    static var shared: [CourseManager] {
-        get {
-            guard let shared = _shared else {
-                let courses = loadCourses()
-                _shared = courses
-                return courses
-            }
-            return shared
-        }
-        set {
-            _shared = newValue
-        }
-    }
-    
-    static var favorites: [CourseManager] {
-        return shared.filter { $0.isFavorite }
+    static var favorites: [CourseModel] {
+        shared.filter { $0.isFavorite }
     }
     
     static func toggleFavorite(at index: Int) {
-        guard index >= 0 && index < shared.count else { return }
+        
+        guard shared.indices.contains(index) else { return }
+        
         shared[index].isFavorite.toggle()
         
-        print(shared[index].isFavorite
-              ? "✅ '\(shared[index].title)' добавлен в избранное"
-              : "❌ '\(shared[index].title)' удалён из избранного")
+        print(
+            shared[index].isFavorite
+            ? "✅ '\(shared[index].title)' добавлен в избранное"
+            : "❌ '\(shared[index].title)' удалён из избранного"
+        )
         
         saveCourses()
     }
     
     static func findIndex(byTitle title: String) -> Int? {
-        return shared.firstIndex { $0.title == title }
+        shared.firstIndex { $0.title == title }
     }
     
-    // Сохраняет текущий список курсов в UserDefaults
+    // MARK: Save Courses
     
     static func saveCourses() {
         do {
@@ -189,11 +197,13 @@ extension CourseManager {
         }
     }
     
-    // Загружает курсы из UserDefaults или возвращает начальные данные
-    private static func loadCourses() -> [CourseManager] {
+    // MARK: Load Courses - Загружает курсы из UserDefaults или возвращает начальные данные
+    
+    private static func loadCourses() -> [CourseModel] {
+        
         if let data = UserDefaults.standard.data(forKey: coursesKey) {
             do {
-                let courses = try JSONDecoder().decode([CourseManager].self, from: data)
+                let courses = try JSONDecoder().decode([CourseModel].self, from: data)
                 print("Курсы загружены из UserDefaults (\(courses.count) шт.)")
                 return courses
             } catch {
@@ -205,41 +215,109 @@ extension CourseManager {
         return sampleData
     }
     
-    private static let sampleData: [CourseManager] = [
-        CourseManager(
+    // MARK: Sample Data
+    
+    private static let sampleData: [CourseModel] = [
+        
+        CourseModel(
             imageName: "course1",
             title: "3D Design Basic",
-            lessons: 24,
+            lessons: 6,
             price: 24.99,
-            isFavorite: false
+            isFavorite: false,
+            description: "In this course you will learn how to build a space to a 3-dimensional product. There are 24 premium learning videos for you",
+            duration: "20 hours",
+            isPurchased: false,
+            lessonsList: [
+                Lesson(title: "Lesson 1: Introduction to 3D", duration: "17 mins", status: .locked),
+                Lesson(title: "Lesson 2: Basic Shapes", duration: "19 mins", status: .locked),
+                Lesson(title: "Lesson 3: Modeling Tools", duration: "21 mins", status: .locked),
+                Lesson(title: "Lesson 4: Materials & Textures", duration: "23 mins", status: .locked),
+                Lesson(title: "Lesson 5: Lighting Basics", duration: "25 mins", status: .locked),
+                Lesson(title: "Lesson 6: Rendering", duration: "27 mins", status: .locked)
+            ]
         ),
-        CourseManager(
+        
+        CourseModel(
             imageName: "course2",
             title: "Characters Animation",
-            lessons: 22,
+            lessons: 9,
             price: 22.69,
-            isFavorite: false
+            isFavorite: false,
+            description: "Learn professional character animation techniques from industry experts. Master the art of bringing characters to life",
+            duration: "18 hours",
+            isPurchased: true,
+            lessonsList: [
+                Lesson(title: "Lesson 1: Animation Principles", duration: "17 mins", status: .completed),
+                Lesson(title: "Lesson 2: Walk Cycles", duration: "19 mins", status: .completed),
+                Lesson(title: "Lesson 3: Run Cycles", duration: "21 mins", status: .completed),
+                Lesson(title: "Lesson 4: Jump Animation", duration: "23 mins", status: .completed),
+                Lesson(title: "Lesson 5: Facial Expressions", duration: "25 mins", status: .completed),
+                Lesson(title: "Lesson 6: Lip Sync", duration: "27 mins", status: .available),
+                Lesson(title: "Lesson 7: Body Mechanics", duration: "29 mins", status: .available),
+                Lesson(title: "Lesson 8: Acting & Emotion", duration: "31 mins", status: .available),
+                Lesson(title: "Lesson 9: Final Project", duration: "33 mins", status: .available)
+            ]
         ),
-        CourseManager(
+        
+        CourseModel(
             imageName: "course3",
             title: "iOS Development",
-            lessons: 30,
+            lessons: 7,
             price: 29.99,
-            isFavorite: false
+            isFavorite: false,
+            description: "Build amazing iOS applications from scratch. Learn Swift, UIKit, and modern iOS development practices",
+            duration: "25 hours",
+            isPurchased: true,
+            lessonsList: [
+                Lesson(title: "Lesson 1: Swift Basics", duration: "17 mins", status: .completed),
+                Lesson(title: "Lesson 2: UIKit Introduction", duration: "19 mins", status: .completed),
+                Lesson(title: "Lesson 3: Auto Layout", duration: "21 mins", status: .completed),
+                Lesson(title: "Lesson 4: Table Views", duration: "23 mins", status: .completed),
+                Lesson(title: "Lesson 5: Navigation", duration: "25 mins", status: .available),
+                Lesson(title: "Lesson 6: Networking", duration: "27 mins", status: .available),
+                Lesson(title: "Lesson 7: Core Data", duration: "29 mins", status: .available)
+            ]
         ),
-        CourseManager(
+        
+        CourseModel(
             imageName: "course4",
             title: "Graphic Design Pro",
-            lessons: 18,
+            lessons: 6,
             price: 19.99,
-            isFavorite: false
+            isFavorite: false,
+            description: "Master graphic design principles and create stunning visual content. Learn Adobe tools and design theory",
+            duration: "15 hours",
+            isPurchased: true,
+            lessonsList: [
+                Lesson(title: "Lesson 1: Design Principles", duration: "17 mins", status: .available),
+                Lesson(title: "Lesson 2: Color Theory", duration: "19 mins", status: .available),
+                Lesson(title: "Lesson 3: Typography", duration: "21 mins", status: .available),
+                Lesson(title: "Lesson 4: Layout Design", duration: "23 mins", status: .available),
+                Lesson(title: "Lesson 5: Branding", duration: "25 mins", status: .available),
+                Lesson(title: "Lesson 6: Portfolio", duration: "27 mins", status: .available)
+            ]
         ),
-        CourseManager(
+        
+        CourseModel(
             imageName: "course5",
             title: "Video Editing Master",
-            lessons: 25,
+            lessons: 8,
             price: 27.49,
-            isFavorite: false
+            isFavorite: false,
+            description: "Become a professional video editor. Learn advanced editing techniques and create cinematic content",
+            duration: "22 hours",
+            isPurchased: false,
+            lessonsList: [
+                Lesson(title: "Lesson 1: Editing Basics", duration: "17 mins", status: .locked),
+                Lesson(title: "Lesson 2: Timeline & Clips", duration: "19 mins", status: .locked),
+                Lesson(title: "Lesson 3: Transitions", duration: "21 mins", status: .locked),
+                Lesson(title: "Lesson 4: Color Grading", duration: "23 mins", status: .locked),
+                Lesson(title: "Lesson 5: Audio Mixing", duration: "25 mins", status: .locked),
+                Lesson(title: "Lesson 6: Effects & Plugins", duration: "27 mins", status: .locked),
+                Lesson(title: "Lesson 7: Export Settings", duration: "29 mins", status: .locked),
+                Lesson(title: "Lesson 8: Final Project", duration: "31 mins", status: .locked)
+            ]
         )
     ]
 }

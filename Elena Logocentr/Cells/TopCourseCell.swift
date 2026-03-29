@@ -75,7 +75,7 @@ class TopCourseCell: UICollectionViewCell {
     
     // MARK: - Configuration
     
-    func configure(with course: CourseManager) {
+    func configure(with course: CourseModel) {
         imageView.image = UIImage(named: course.imageName)
     }
 }

@@ -30,7 +30,7 @@ class TabBarViewController: UITabBarController {
         let coursesVC = CoursesViewController()
         let coursesNav = UINavigationController(rootViewController: coursesVC)
         coursesNav.tabBarItem = UITabBarItem(
-            title: "Курсы",
+            title: "Courses",
             image: UIImage(systemName: "list.bullet"),
             selectedImage: UIImage(systemName: "list.bullet")
         )
@@ -39,7 +39,7 @@ class TabBarViewController: UITabBarController {
         let profileVC = ProfileViewController()
         let profileNav = UINavigationController(rootViewController: profileVC)
         profileNav.tabBarItem = UITabBarItem(
-            title: "Профиль",
+            title: "Profile",
             image: UIImage(systemName: "person"),
             selectedImage: UIImage(systemName: "person.fill")
         )

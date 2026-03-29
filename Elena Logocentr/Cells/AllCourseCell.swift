@@ -171,7 +171,7 @@ class AllCourseCell: UICollectionViewCell {
     
     // MARK: - Configuration
     
-    func configure(with course: CourseManager, at indexPath: IndexPath) {
+    func configure(with course: CourseModel, at indexPath: IndexPath) {
         self.indexPath = indexPath
         imageView.image = UIImage(named: course.imageName)
         titleLabel.text = course.title

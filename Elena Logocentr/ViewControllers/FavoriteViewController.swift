@@ -11,7 +11,7 @@ class FavoritesViewController: UIViewController {
     
     // MARK: - Properties
     
-    private var favoriteCourses: [CourseManager] = []
+    private var favoriteCourses: [CourseModel] = []
     var onFavoritesChanged: (() -> Void)?
     
     // MARK: - UI Components
@@ -136,7 +136,7 @@ class FavoritesViewController: UIViewController {
     // MARK: - Data Loading
     
     private func loadFavorites() {
-        favoriteCourses = CourseManager.favorites
+        favoriteCourses = CourseModel.favorites
         updateUI()
     }
     
@@ -186,9 +186,9 @@ extension FavoritesViewController: UICollectionViewDataSource {
 extension FavoritesViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let course = favoriteCourses[indexPath.item]
-        print("Нажата ячейка \(indexPath.item): \(course.title)")
-        // TODO: Открыть DetailViewController
+        let selectedCourse = favoriteCourses[indexPath.item]
+        let detailVC = CourseDetailViewController(course: selectedCourse)
+        navigationController?.pushViewController(detailVC, animated: true)
     }
 }
 
@@ -201,13 +201,13 @@ extension FavoritesViewController: AllCourseCellDelegate {
 
         let course = favoriteCourses[indexPath.item]
 
-        guard let mainIndex = CourseManager.findIndex(byTitle: course.title) else { return }
+        guard let mainIndex = CourseModel.findIndex(byTitle: course.title) else { return }
 
-        CourseManager.toggleFavorite(at: mainIndex)
+        CourseModel.toggleFavorite(at: mainIndex)
         onFavoritesChanged?()
 
         // Обновляем локальные данные
-        favoriteCourses = CourseManager.favorites
+        favoriteCourses = CourseModel.favorites
 
         if favoriteCourses.isEmpty {
             collectionView.reloadData()

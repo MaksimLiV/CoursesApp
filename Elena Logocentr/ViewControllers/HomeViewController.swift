@@ -49,7 +49,7 @@ class HomeViewController: UIViewController {
     
     private lazy var allCoursesLabel: UILabel = {
         let label = UILabel()
-        label.text = "Все курсы"
+        label.text = "All courses"
         label.font = .boldSystemFont(ofSize: 20)
         label.textColor = .label
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -86,12 +86,12 @@ class HomeViewController: UIViewController {
     
     // MARK: - Data
     
-    private var topCourses: [CourseManager] {
-        CourseManager.shared
+    private var topCourses: [CourseModel] {
+        CourseModel.shared
     }
     
-    private var allCourses: [CourseManager] {
-        CourseManager.shared
+    private var allCourses: [CourseModel] {
+        CourseModel.shared
     }
     
     // MARK: - Lifecycle
@@ -132,7 +132,7 @@ class HomeViewController: UIViewController {
     // MARK: - Setup
     
     private func setupNavigationBar() {
-        title = "Главная"
+        title = "Home"
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.largeTitleDisplayMode = .never
         
@@ -252,7 +252,7 @@ extension HomeViewController: AllCourseCellDelegate {
         guard indexPath.item < allCourses.count else { return }
         
         // ✅ Переключаем избранное (автоматически сохраняется в UserDefaults)
-        CourseManager.toggleFavorite(at: indexPath.item)
+        CourseModel.toggleFavorite(at: indexPath.item)
         
         // ✅ Обновляем конкретную ячейку для плавной анимации
         allCoursesCollectionView.reloadItems(at: [indexPath])
@@ -261,5 +261,28 @@ extension HomeViewController: AllCourseCellDelegate {
         if let topIndex = topCourses.firstIndex(where: { $0.title == allCourses[indexPath.item].title }) {
             topCoursesCollectionView.reloadItems(at: [IndexPath(item: topIndex, section: 0)])
         }
+    }
+}
+
+
+// MARK: - UICollectionViewDelegate
+
+extension HomeViewController: UICollectionViewDelegate {
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        // Получаем выбранный курс
+        let selectedCourse: CourseModel
+        
+        if collectionView == topCoursesCollectionView {
+            selectedCourse = topCourses[indexPath.item]
+        } else {
+            selectedCourse = allCourses[indexPath.item]
+        }
+        
+        // Создаём DetailViewController
+        let detailVC = CourseDetailViewController(course: selectedCourse)
+        
+        // Показываем экран
+        navigationController?.pushViewController(detailVC, animated: true)
     }
 }
