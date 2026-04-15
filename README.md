@@ -1,6 +1,5 @@
 
-
-> An iOS application for browsing and enrolling in online courses, built with Swift and UIKit.
+An iOS application for browsing and enrolling in online courses, built with Swift and UIKit.
 
 ---
 
