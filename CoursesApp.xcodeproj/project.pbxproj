@@ -7,26 +7,26 @@
 	objects = {
 
 /* Begin PBXFileReference section */
-		377AFBEA2ED0454E007945CD /* Elena Logocentr.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Elena Logocentr.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		377AFBEA2ED0454E007945CD /* CoursesApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CoursesApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		377AFBFC2ED04550007945CD /* Exceptions for "Elena Logocentr" folder in "Elena Logocentr" target */ = {
+		377AFBFC2ED04550007945CD /* Exceptions for "CoursesApp" folder in "CoursesApp" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
 			);
-			target = 377AFBE92ED0454E007945CD /* Elena Logocentr */;
+			target = 377AFBE92ED0454E007945CD /* CoursesApp */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		377AFBEC2ED0454E007945CD /* Elena Logocentr */ = {
+		377AFBEC2ED0454E007945CD /* CoursesApp */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				377AFBFC2ED04550007945CD /* Exceptions for "Elena Logocentr" folder in "Elena Logocentr" target */,
+				377AFBFC2ED04550007945CD /* Exceptions for "CoursesApp" folder in "CoursesApp" target */,
 			);
-			path = "Elena Logocentr";
+			path = CoursesApp;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -45,7 +45,7 @@
 		377AFBE12ED0454E007945CD = {
 			isa = PBXGroup;
 			children = (
-				377AFBEC2ED0454E007945CD /* Elena Logocentr */,
+				377AFBEC2ED0454E007945CD /* CoursesApp */,
 				377AFBEB2ED0454E007945CD /* Products */,
 			);
 			sourceTree = "<group>";
@@ -53,7 +53,7 @@
 		377AFBEB2ED0454E007945CD /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				377AFBEA2ED0454E007945CD /* Elena Logocentr.app */,
+				377AFBEA2ED0454E007945CD /* CoursesApp.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -61,9 +61,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		377AFBE92ED0454E007945CD /* Elena Logocentr */ = {
+		377AFBE92ED0454E007945CD /* CoursesApp */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 377AFBFD2ED04550007945CD /* Build configuration list for PBXNativeTarget "Elena Logocentr" */;
+			buildConfigurationList = 377AFBFD2ED04550007945CD /* Build configuration list for PBXNativeTarget "CoursesApp" */;
 			buildPhases = (
 				377AFBE62ED0454E007945CD /* Sources */,
 				377AFBE72ED0454E007945CD /* Frameworks */,
@@ -74,13 +74,13 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				377AFBEC2ED0454E007945CD /* Elena Logocentr */,
+				377AFBEC2ED0454E007945CD /* CoursesApp */,
 			);
-			name = "Elena Logocentr";
+			name = CoursesApp;
 			packageProductDependencies = (
 			);
-			productName = "Elena Logocentr";
-			productReference = 377AFBEA2ED0454E007945CD /* Elena Logocentr.app */;
+			productName = "CoursesApp";
+			productReference = 377AFBEA2ED0454E007945CD /* CoursesApp.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -98,7 +98,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 377AFBE52ED0454E007945CD /* Build configuration list for PBXProject "Elena Logocentr" */;
+			buildConfigurationList = 377AFBE52ED0454E007945CD /* Build configuration list for PBXProject "CoursesApp" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -112,7 +112,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				377AFBE92ED0454E007945CD /* Elena Logocentr */,
+				377AFBE92ED0454E007945CD /* CoursesApp */,
 			);
 		};
 /* End PBXProject section */
@@ -148,7 +148,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = F8S89LZ4N7;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "Elena Logocentr/Info.plist";
+				INFOPLIST_FILE = "CoursesApp/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -182,7 +182,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = F8S89LZ4N7;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "Elena Logocentr/Info.plist";
+				INFOPLIST_FILE = "CoursesApp/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -330,7 +330,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		377AFBE52ED0454E007945CD /* Build configuration list for PBXProject "Elena Logocentr" */ = {
+		377AFBE52ED0454E007945CD /* Build configuration list for PBXProject "CoursesApp" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				377AFC002ED04550007945CD /* Debug */,
@@ -339,7 +339,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		377AFBFD2ED04550007945CD /* Build configuration list for PBXNativeTarget "Elena Logocentr" */ = {
+		377AFBFD2ED04550007945CD /* Build configuration list for PBXNativeTarget "CoursesApp" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				377AFBFE2ED04550007945CD /* Debug */,
